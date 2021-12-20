@@ -197,12 +197,9 @@ class Solver(object):
                         else:
                             del new_board
             step+=1
-        self.ans_board=None
-        self.step=-1
         return -1
     
     def solver_astar(self):
-        step=0
         queue=[] #优先级队列
         heapq.heappush(queue,self.board)
         dxdy=[[-1,0],[0,-1],[1,0],[0,1]]
@@ -230,9 +227,6 @@ class Solver(object):
                         visited.add(new_str)
                     else:
                         del new_board
-            step+=1
-        self.ans_board=None
-        self.step=-1
         return -1
         
     # 返回最短的路径
