@@ -20,6 +20,21 @@ class Calculator(object):
     # 系统会默认调用这个函数进行评测，你必须实验这个函数
     # 输入一个计算表达式，例如2+3*√4，返回的结果是8
     # 返回计算后的结构
+    def run_operator(self):
+        op=self.stack_op.pop()
+        if self.op_element[op]==2:#二元运算
+            a=self.stack_num.pop()
+            b=self.stack_num.pop()
+            # print(str(b)+op+str(a))
+            if op=='*':self.stack_num.append(b*a)
+            elif op=='+':self.stack_num.append(b+a)
+            elif op=='-':self.stack_num.append(b-a)
+            elif op=='/':self.stack_num.append(b/a)
+        elif self.op_element[op]==1:
+            a=self.stack_num.pop()
+            if op=='√':
+                # print(op+str(a))
+                self.stack_num.append(a**0.5)
     def solver(self, input):
         self.stack_op.clear()
         self.stack_num.clear()
@@ -28,7 +43,7 @@ class Calculator(object):
         last_char=''
         for i in range(len(input)):
             #注意处理大于9的数字，1 4
-            print(self.stack_num,self.stack_op)
+            # print(self.stack_num,self.stack_op)
             char=input[i]
             if char.isdigit():
                 num=10*num+(int(char))
@@ -39,25 +54,12 @@ class Calculator(object):
                 elif char=='-' and last_char!=')':
                     self.stack_num.append(0)
                 #判断运算符的优先级
-                print('---',char,self.stack_op)
+                # print('---',char,self.stack_op)
                 # op=char
                 while self.stack_op and self.op_priority[char][self.stack_op[-1]]<=0:#优先级相同或更小
                     if self.op_priority[char][self.stack_op[-1]]<0:
                         #弹出符号，先进行处理,处理完再压栈
-                        op=self.stack_op.pop()
-                        if self.op_element[op]==2:#二元运算
-                            a=self.stack_num.pop()
-                            b=self.stack_num.pop()
-                            print(str(b)+op+str(a))
-                            if op=='*':self.stack_num.append(b*a)
-                            elif op=='+':self.stack_num.append(b+a)
-                            elif op=='-':self.stack_num.append(b-a)
-                            elif op=='/':self.stack_num.append(b/a)
-                        elif self.op_element[op]==1:
-                            a=self.stack_num.pop()
-                            if op=='√':
-                                print(op+str(a))
-                                self.stack_num.append(a**0.5)
+                        self.run_operator()
                     else:
                         op=self.stack_op.pop()
                         break
@@ -66,22 +68,9 @@ class Calculator(object):
             last_char=char
         if str(last_char).isdigit():
             self.stack_num.append(num)
-        print(self.stack_num,self.stack_op)
+        # print(self.stack_num,self.stack_op)
         while self.stack_op:
-            op=self.stack_op.pop()
-            if self.op_element[op]==2:#二元运算
-                a=self.stack_num.pop()
-                b=self.stack_num.pop()
-                print(str(b)+op+str(a))
-                if op=='*':self.stack_num.append(b*a)
-                elif op=='+':self.stack_num.append(b+a)
-                elif op=='-':self.stack_num.append(b-a)
-                elif op=='/':self.stack_num.append(b-a)
-            elif self.op_element[op]==1:
-                a=self.stack_num.pop()
-                if op=='√':
-                    print(op+str(a))
-                    self.stack_num.append(a**0.5)
+            self.run_operator()
         return self.stack_num[0] 
 
 
